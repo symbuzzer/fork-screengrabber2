@@ -1894,10 +1894,17 @@ TInt CScreenGrabberModel::UpdateFileToGallery(const TDesC& aFullPath)
 
 void CScreenGrabberModel::CheckSecondScreen()
 {
-    iSecondScreenAvailable = EFalse;
+    
+    //iSecondScreenAvailable = (iEnv->WsSession().NumberOfScreens() > 1);
+    TInt err = KErrNone;
+    TInt numberOfScreens = 1;
+    if ( (err = HAL::Get(HALData::EDisplayNumberOfScreens, numberOfScreens)) == KErrNone)
+    {
+	iSecondScreenAvailable = (numberOfScreens > 1);
+    }
+/*
     TInt xValue;
     TInt yValue;
-    TInt err = KErrNone;
     const TInt screenDeviceNumber(1);
 
     if ( (err = HAL::Get(screenDeviceNumber, HALData::EDisplayXPixels, xValue)) == KErrNone)
@@ -1905,6 +1912,7 @@ void CScreenGrabberModel::CheckSecondScreen()
 	err = HAL::Get(screenDeviceNumber, HALData::EDisplayYPixels, yValue);
     }
     iSecondScreenAvailable = (err == KErrNone);
+*/
 }
 
 TBool CScreenGrabberModel::SecondScreenAvailable()

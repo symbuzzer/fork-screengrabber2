@@ -100,5 +100,5 @@ LIBRARY           estlib.lib
 
 // Screen resolution change support
 MACRO SCREENGRABBER_SCREEN_RESOLUTION_CHANGE_SUPPORT
-
+//MACRO SYMBIAN_WSERV_AND_CONE_MULTIPLE_SCREENS
 // End of File
