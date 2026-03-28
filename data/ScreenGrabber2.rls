@@ -15,8 +15,11 @@
 #ifdef LANGUAGE_SC
 #include "ScreenGrabber2_01.rls"   // default U.K. English
 #elif defined LANGUAGE_01
-/*
 #include "ScreenGrabber2_01.rls"   // U.K. English
+#elif defined LANGUAGE_14
+#include "ScreenGrabber2_14.rls"   // Turkish by symbuzzer
+
+/*
 #elif defined LANGUAGE_09
 #include "ScreenGrabber2_09.rls"   // Finnish
 #elif defined LANGUAGE_31
@@ -24,4 +27,5 @@
 #elif defined LANGUAGE_32
 #include "ScreenGrabber2_32.rls"   // Japanese
 */
+
 #endif

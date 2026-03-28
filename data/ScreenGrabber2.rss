@@ -583,7 +583,7 @@ RESOURCE DIALOG r_screengrabber_about_dialog
             id = EAknMessageQueryContentId;
             control = AVKON_MESSAGE_QUERY
             {
-                message = "ScreenGrabber 4.6.2 (2026) by JigokuMaster .\nbased on version 4.2.0 - 14th May 2009. Copyright © 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. Licensed under Eclipse Public License v1.0.";
+                message = "ScreenGrabber 4.6.3 (2026) by JigokuMaster.\nbased on version 4.2.0 - 14th May 2009. Copyright © 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. Licensed under Eclipse Public License v1.0.";
             };
         }
     };

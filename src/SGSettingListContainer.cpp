@@ -148,7 +148,6 @@ void CHotkeySettingItem::HandleSettingPageEventL(CAknSettingPage* aSettingPage,T
     }
 }
 
-
 class CSavePathSettingItem: public CAknTextSettingItem
 {
 public:    
@@ -176,6 +175,22 @@ void CSavePathSettingItem::HandleSettingPageEventL(CAknSettingPage* aSettingPage
     }
 }
 
+
+
+static void DoFormatSize(TDes &aDes, TInt64 aSize)
+{
+    wchar_t* sizeSnits[] = {L"B", L"KB", L"MB", L"GB", L"TB"};
+    TReal size = (TReal)aSize;
+    for (TInt i=0; i < 5; i++){
+	if (size < 1024.0)
+	{
+            aDes.Format(_L("%.2f%s"), size, sizeSnits[i]);
+	    break;
+	}
+        size /= 1024.0;
+    } 
+}
+
 TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
 {
 
@@ -189,7 +204,6 @@ TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
     CleanupStack::PushL(popupList);
 
     HBufC* title = CCoeEnv::Static()->AllocReadResourceLC(R_SAVEPATHSELECTION_DIALOG_TITLE);
-
     popupList->SetTitleL(*title);
     CleanupStack::PopAndDestroy(title);
 
@@ -197,6 +211,8 @@ TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
     list->ConstructL(popupList, flags);
     list->CreateScrollBarFrameL(ETrue);
     list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff,CEikScrollBarFrame::EAuto);
+    //list->EnableExtendedDrawingL();
+    list->ItemDrawer()->FormattedCellData()->EnableMarqueeL(ETrue);
     CDesCArrayFlat* items = new CDesCArrayFlat(3);
     CleanupStack::PushL(items);
  
@@ -205,7 +221,8 @@ TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
 
     // Add drives
     CDesCArrayFlat* driveList = new CDesCArrayFlat(3);
-    BaflUtils::GetDiskListL(CCoeEnv::Static()->FsSession(), *driveList);
+    RFs& fs = CCoeEnv::Static()->FsSession();
+    BaflUtils::GetDiskListL(fs, *driveList);
  
     //CleanupStack::PushL(driveList); // KERN-EXEC3 when this function returns!!
    
@@ -225,17 +242,16 @@ TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
     for (i = 0; i < driveList->MdcaCount(); i++)
     {
 
-	TPtrC d = driveList->MdcaPoint(i); 
-	
+	TPtrC d = driveList->MdcaPoint(i); 	
 	TBuf<3> root(d);
 	root.Append(_L(":\\"));
 	TBool rootOK(EFalse);
 
-	if (BaflUtils::PathExists(CCoeEnv::Static()->FsSession(), root))
+	if (BaflUtils::PathExists(fs, root))
 	{
 	    
 	    TBool isRO(EFalse); 
-	    if (BaflUtils::DiskIsReadOnly(CCoeEnv::Static()->FsSession(), root, isRO) == KErrNone)
+	    if (BaflUtils::DiskIsReadOnly(fs, root, isRO) == KErrNone)
 	    {
 		rootOK = !isRO;	
 	    }
@@ -248,12 +264,39 @@ TBool CSavePathSettingItem::SelectDrivePathL(TDes &aPath)
 	    continue;
 	}
 
-	TBuf<10> item;
-	item.Format(_L("%d\t%S\t"), iconIndex, &d);
+	TBuf<KMaxFileName+64> item;
+	TBuf<64> sizeInfo1;
+	//TBuf<64> sizeInfo2;
+	TVolumeInfo driveInfo;
+	TInt driveNumber;
+
+ 	fs.CharToDrive(d[0], driveNumber); 
+        if (fs.Volume(driveInfo, driveNumber) != KErrNone)
+	{
+	    driveList->Delete(i);
+	    continue;
+	}
 	
-	iconIndex++;
+	TBuf<KMaxFileName> driveName = driveInfo.iName; // Optional name of the volume
+	
+	if (driveName.Length() == 0)
+	{
+	    TInt mediaType = driveInfo.iDrive.iType;
+            if (mediaType == EMediaNANDFlash){ 
+		if (d[0] == 'C') driveName = _L("Phone memory");
+		else  driveName = _L("NAND flash");
+	    }
+
+	    if (mediaType == EMediaHardDisk) driveName = _L("Mass storage");
+	    else if (mediaType == EMediaRemote) driveName = _L("Remote");
+	}
+
+	DoFormatSize(sizeInfo1, driveInfo.iFree);
+        //DoFormatSize(sizeInfo2, driveInfo.iSize);
+	item.Format(_L("%d\t%S: %S\tFree: %S\t"), iconIndex, &d, &driveName, &sizeInfo1);
 	items->AppendL(item);
-	
+	iconIndex++;
+
 	CFbsBitmap *bm, *mask;
 	if (d[0] == 'F' || d[0] == 'E')
 	{

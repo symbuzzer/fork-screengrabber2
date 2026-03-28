@@ -94,6 +94,7 @@ void CScreenGrabberModel::ConstructL()
   	iHashKeyDown = EFalse;
   	iGalleryUpdaterSupported = ETrue;
   	iGalleryUpdaterInitialized = EFalse;
+	iSecondScreenAvailable = EFalse;
 	CheckSecondScreen();
 	CActiveScheduler::Add(this);
 	}
@@ -1891,28 +1892,43 @@ TInt CScreenGrabberModel::UpdateFileToGallery(const TDesC& aFullPath)
     }
 
 #include <hal.h>
-
+//#include <aknglobalmsgquery.h>
 void CScreenGrabberModel::CheckSecondScreen()
 {
-    
-    //iSecondScreenAvailable = (iEnv->WsSession().NumberOfScreens() > 1);
+    //TBuf<1024> msg;
     TInt err = KErrNone;
-    TInt numberOfScreens = 1;
+    TInt numberOfScreens;
     if ( (err = HAL::Get(HALData::EDisplayNumberOfScreens, numberOfScreens)) == KErrNone)
     {
 	iSecondScreenAvailable = (numberOfScreens > 1);
+	//msg.AppendFormat(_L("EDisplayNumberOfScreens: %d"), numberOfScreens);
     }
-/*
-    TInt xValue;
-    TInt yValue;
-    const TInt screenDeviceNumber(1);
 
+    //else  msg.AppendFormat(_L("EDisplayNumberOfScreens: ERROR %d"), err);
+
+
+    TInt xValue = 0;
+    TInt yValue = 0;
+    const TInt screenDeviceNumber(1);
     if ( (err = HAL::Get(screenDeviceNumber, HALData::EDisplayXPixels, xValue)) == KErrNone)
     {
-	err = HAL::Get(screenDeviceNumber, HALData::EDisplayYPixels, yValue);
+	HAL::Get(screenDeviceNumber, HALData::EDisplayYPixels, yValue);
+	/*** S^3 devices are always reporting more than one display screen!
+	 * so we have to check if the 2nd screen is a valid device or not.
+	 * Thanks to symbuzzer for testing this.
+	 ***/
+	iSecondScreenAvailable = ((xValue > 0) && (yValue > 0)); 
+	//msg.AppendFormat(_L("\nEDisplayXYPixels: %dx%dP"), xValue, yValue);
     }
-    iSecondScreenAvailable = (err == KErrNone);
-*/
+
+    //else msg.AppendFormat(_L("\nEDisplayXYPixels: ERROR %d"), err);
+    
+    /*TRequestStatus status = KRequestPending;
+    CAknGlobalMsgQuery *d = CAknGlobalMsgQuery::NewL();
+    CleanupStack::PushL(d);
+    d->ShowMsgQueryL(status, msg,R_AVKON_SOFTKEYS_OK_CANCEL, _L("Checking second screen."), KNullDesC);
+    User::WaitForRequest(status);
+    CleanupStack::PopAndDestroy(d);*/
 }
 
 TBool CScreenGrabberModel::SecondScreenAvailable()
