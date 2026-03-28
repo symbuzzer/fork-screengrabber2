@@ -63,7 +63,7 @@ rls_string STRING_r_sg_item9  "Kayıt yolu"
 
 rls_string STRING_r_sg_arr1_item1  "Tekli yakalama"
 
-rls_string STRING_r_sg_arr1_item2  "Ardışık yakalama"
+rls_string STRING_r_sg_arr1_item2  "Ardarda yakalama"
 
 rls_string STRING_r_sg_arr1_item3  "Video yakalama"
 
@@ -109,7 +109,7 @@ rls_string STRING_r_sg_arr4_item4   "BMP"
 
 rls_string STRING_r_sg_arr4_item5   "GIF"
 
-rls_string STRING_r_sg_arr4_item6   "YK GIF"
+rls_string STRING_r_sg_arr4_item6   "GIF yüksek kalite"
 
 rls_string STRING_r_sg_arr4_item7   "MBM"
 
@@ -125,7 +125,7 @@ rls_string STRING_r_dlg1_label  "Bir tuşa basın:"
 
 // strings for dialog (About)
 
-rls_string STRING_r_dlg2_label  "Ekran Yakalayıcı Hakkında"
+rls_string STRING_r_dlg2_label  "Screen Grabber Hakkında"
 
 // strings for (Save Path Selection Dialog)
 
@@ -137,7 +137,7 @@ rls_string STRING_r_dlg4_prompt "Kaydediliyor"
 
 // strings for (Exit Query)
 
-rls_string STRING_r_dlg5_prompt "Ekran görüntüleri durduruluyor ve çıkılıyor?"
+rls_string STRING_r_dlg5_prompt "Screen Grabber durdurulsun ve çıkılsın mı?"
 
 
 // string for (Save Confirmation Query)
@@ -150,7 +150,7 @@ rls_string STRING_r_dlg6_prompt3 "Video Medya Galerisine kaydedildi"
 
 // usage text string 
 
-rls_string STRING_r_usage_msg "Lütfen yakalama modunu ve yakalama kısayolu ile kaydetme biçimi gibi diğer ilgili ayarları tanımlamak için ayarlar ekranını kullanın. Ekran görüntüleri için PNG biçiminin kullanılması önerilir; zira sıkıştırılmış fakat kayıpsızdır. Yakalamalar Medya Galerisi uygulamasıyla yönetilebilir.\n\nEkran görüntüsü almaya veya video kaydetmeye şimdi başlayabilirsiniz. Uygulama menüsüne dönmek için Uygulamalar tuşuna basın veya Seçenekler menüsünden bu uygulamayı arka plana gönderin. Ekran görüntüsü alabilmek veya video kaydedebilmek için bu uygulamanın arka planda çalışmaya devam etmesi gerekmektedir.\n"
+rls_string STRING_r_usage_msg "Lütfen yakalama modunu ve yakalama kısayolu ile kaydetme biçimi gibi diğer ilgili ayarları tanımlamak için Ayarlar ekranını kullanın. Ekran görüntüleri için PNG biçiminin kullanılması önerilir; zira sıkıştırılmış fakat kayıpsızdır. Yakalamalar Medya Galerisi uygulamasıyla yönetilebilir.\n\nEkran görüntüsü almaya veya video kaydetmeye şimdi başlayabilirsiniz. Uygulama menüsüne dönmek için Uygulamalar tuşuna basın veya Seçenekler menüsünden bu uygulamayı arka plana gönderin. Ekran görüntüsü alabilmek veya video kaydedebilmek için bu uygulamanın arka planda çalışmaya devam etmesi gerekmektedir.\n"
 
 
 // End of File
